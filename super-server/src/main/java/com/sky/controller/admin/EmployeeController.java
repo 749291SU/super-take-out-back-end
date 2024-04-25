@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.Query;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,4 +101,36 @@ public class EmployeeController {
         return Result.success(employeeService.page(employeePageQueryDTO));
     }
 
+    /**
+     * 启用或禁用员工账号
+     */
+    @ApiOperation("启用或禁用员工账号")
+    @PostMapping("/status/{status}")
+    public Result status(@ApiParam("员工id") Long id, @ApiParam("状态") @PathVariable Integer status) {
+        log.info("启用或禁用员工账号：员工id为{}，状态为{}", id, status);
+        employeeService.status(id, status);
+        return Result.success();
+    }
+
+
+    /**
+     * 根据id获取员工信息
+     */
+    @ApiOperation("根据id获取员工信息")
+    @GetMapping("/{id}")
+    public Result<Employee> getById(@ApiParam("员工id") @PathVariable Long id) {
+        log.info("根据id获取员工信息：员工id为{}", id);
+        return Result.success(employeeService.getById(id));
+    }
+
+    /**
+     * 修改员工信息
+     */
+    @ApiOperation("修改员工信息")
+    @PutMapping
+    public Result update(@ApiParam("员工数据") @RequestBody EmployeeDTO employeeDTO) {
+        log.info("修改员工信息：{}", employeeDTO);
+        employeeService.update(employeeDTO);
+        return Result.success();
+    }
 }
