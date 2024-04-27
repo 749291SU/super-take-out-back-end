@@ -13,7 +13,6 @@ import java.io.ByteArrayInputStream;
 @AllArgsConstructor
 @Slf4j
 public class AliOssUtil {
-
     private String endpoint;
     private String accessKeyId;
     private String accessKeySecret;
