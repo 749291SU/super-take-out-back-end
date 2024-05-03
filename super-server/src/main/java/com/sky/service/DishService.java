@@ -2,8 +2,11 @@ package com.sky.service;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.vo.DishVO;
 import com.sky.result.PageResult;
+
+import java.util.List;
 
 /**
  * @projectName: super-takeout
@@ -24,4 +27,6 @@ public interface DishService {
     DishVO findById(Long id);
 
     void updateWithFlavor(DishDTO dishDTO);
+
+    List<DishVO> listWithFlavor(Dish dish);
 }

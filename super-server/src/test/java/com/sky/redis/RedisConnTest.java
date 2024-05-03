@@ -1,4 +1,4 @@
-package com.sky.md5.com.sky.redis;
+package com.sky.redis;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
