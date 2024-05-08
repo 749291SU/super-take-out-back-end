@@ -26,4 +26,10 @@ public interface ShoppingCartMapper {
     ShoppingCart getByUserIdAndDishId(Long userId, Long dishId);
 
     List<ShoppingCart> selectByEntity(ShoppingCart shoppingCart);
+
+    @Select("select * from shopping_cart where user_id = #{userId}")
+    List<ShoppingCart> list(Long userId);
+
+    @Delete("delete from shopping_cart where user_id = #{userId}")
+    void deleteByUserId(Long userId);
 }

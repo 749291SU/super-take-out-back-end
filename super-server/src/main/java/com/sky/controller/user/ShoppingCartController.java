@@ -1,5 +1,7 @@
 package com.sky.controller.user;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
+import com.sky.context.BaseContext;
 import com.sky.dto.ShoppingCartDTO;
 import com.sky.result.Result;
 import com.sky.service.ShoppingCartService;
@@ -41,10 +43,21 @@ public class ShoppingCartController {
     /**
      * 列出购物出所有菜品和套餐
      */
-//    @ApiOperation(value = "列出购物出所有菜品和套餐")
-//    @GetMapping("/list")
-//    public Result list() {
-//        log.info("列出购物出所有菜品和套餐");
-//        return Result.success(shoppingCartService.list());
-//    }
+    @ApiOperation(value = "列出购物出所有菜品和套餐")
+    @GetMapping("/list")
+    public Result list() {
+        log.info("列出购物出所有菜品和套餐");
+        return Result.success(shoppingCartService.list(BaseContext.getCurrentId()));
+    }
+
+    /**
+     * 清空购物车
+     */
+    @ApiOperation(value = "清空购物车")
+    @DeleteMapping("/clean")
+    public Result clear() {
+        log.info("清空购物车");
+        shoppingCartService.clean(BaseContext.getCurrentId());
+        return Result.success();
+    }
 }
