@@ -7,6 +7,8 @@ import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
 import com.sky.result.PageResult;
 
+import java.lang.reflect.GenericDeclaration;
+import java.lang.reflect.TypeVariable;
 import java.util.List;
 
 /**

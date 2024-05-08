@@ -7,6 +7,8 @@ import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.*;
 
+import java.lang.reflect.GenericDeclaration;
+import java.lang.reflect.TypeVariable;
 import java.util.List;
 
 @Mapper
@@ -36,4 +38,7 @@ public interface DishMapper {
     void update(Dish dish);
 
     List<Dish> list(Dish dish);
+
+    @Select("select * from dish where id = #{dishId}")
+    Dish getById(Long dishId);
 }
