@@ -180,4 +180,15 @@ public class DishServiceImpl implements DishService {
 
         return dishVOList;
     }
+
+    @Override
+    public void updateStatus(Long id, Integer status) {
+        dishMapper.update(Dish.builder().id(id).status(status).build());
+    }
+
+    @Override
+    public List<Dish> listByCategoryId(Long categoryId) {
+        List<Dish> list = dishMapper.list(Dish.builder().categoryId(categoryId).build());
+        return list;
+    }
 }
