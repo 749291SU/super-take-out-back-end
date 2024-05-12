@@ -22,4 +22,10 @@ public interface OrderMapper {
      * @param orders
      */
     void update(Orders orders);
+
+    List<Orders> selectByEntity(Orders order);
+
+    void deleteBatch(List<Long> orderIds);
+
+    void updateById(Orders order);
 }

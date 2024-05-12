@@ -36,4 +36,125 @@
         </set>
         where id = #{id}
     </update>
+    <update id="updateById">
+        update orders
+        <set>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="deliveryStatus != null">
+                delivery_status = #{deliveryStatus},
+            </if>
+            <if test="deliveryTime != null">
+                delivery_time = #{deliveryTime},
+            </if>
+            <if test="packAmount != null">
+                pack_amount = #{packAmount},
+            </if>
+            <if test="tablewareNumber != null">
+                tableware_number = #{tablewareNumber},
+            </if>
+            <if test="tablewareStatus != null">
+                tableware_status = #{tablewareStatus},
+            </if>
+            <if test="cancelReason != null and cancelReason!='' ">
+                cancel_reason=#{cancelReason},
+            </if>
+            <if test="rejectionReason != null and rejectionReason!='' ">
+                rejection_reason=#{rejectionReason},
+            </if>
+            <if test="cancelTime != null">
+                cancel_time=#{cancelTime},
+            </if>
+            <if test="payStatus != null">
+                pay_status=#{payStatus},
+            </if>
+            <if test="payMethod != null">
+                pay_method=#{payMethod},
+            </if>
+            <if test="checkoutTime != null">
+                checkout_time=#{checkoutTime},
+            </if>
+            <if test="deliveryTime != null">
+                delivery_time = #{deliveryTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBatch">
+        delete from orders where id in
+        <foreach collection="orderIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="selectByEntity" resultType="com.sky.entity.Orders">
+        select * from orders
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="number != null and number!='' ">
+                and number=#{number}
+            </if>
+            <if test="status != null">
+                and status=#{status}
+            </if>
+            <if test="userId != null">
+                and user_id=#{userId}
+            </if>
+            <if test="addressBookId != null">
+                and address_book_id=#{addressBookId}
+            </if>
+            <if test="orderTime != null">
+                and order_time=#{orderTime}
+            </if>
+            <if test="checkoutTime != null">
+                and checkout_time=#{checkoutTime}
+            </if>
+            <if test="payMethod != null">
+                and pay_method=#{payMethod}
+            </if>
+            <if test="payStatus != null">
+                and pay_status=#{payStatus}
+            </if>
+            <if test="amount != null">
+                and amount=#{amount}
+            </if>
+            <if test="remark != null and remark!='' ">
+                and remark=#{remark}
+            </if>
+            <if test="phone != null and phone!='' ">
+                and phone=#{phone}
+            </if>
+            <if test="address != null and address!='' ">
+                and address=#{address}
+            </if>
+            <if test="userName != null and userName!='' ">
+                and user_name=#{userName}
+            </if>
+            <if test="consignee != null and consignee!='' ">
+                and consignee=#{consignee}
+            </if>
+            <if test="cancelReason != null and cancelReason!='' ">
+                and cancel_reason=#{cancelReason}
+            </if>
+            <if test="rejectionReason != null and rejectionReason!='' ">
+                and rejection_reason=#{rejectionReason}
+            </if>
+            <if test="cancelTime != null">
+                and cancel_time=#{cancelTime}
+            </if>
+            <if test="estimatedDeliveryTime != null">
+                and estimated_delivery_time=#{estimatedDeliveryTime}
+            </if>
+            <if test="deliveryStatus != null">
+                and delivery_status=#{deliveryStatus}
+            </if>
+            <if test="deliveryTime != null">
+                and delivery_time=#{deliveryTime}
+            </if>
+        </where>
+    </select>
 </mapper>
