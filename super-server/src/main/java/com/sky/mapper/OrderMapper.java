@@ -28,4 +28,7 @@ public interface OrderMapper {
     void deleteBatch(List<Long> orderIds);
 
     void updateById(Orders order);
+
+    @Select("select * from orders where id = #{id}")
+    Orders getById(Long id);
 }
