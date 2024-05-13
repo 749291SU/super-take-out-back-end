@@ -57,5 +57,4 @@ public class WebSocketServer {
         log.error("发生错误");
         error.printStackTrace();
     }
-
 }
