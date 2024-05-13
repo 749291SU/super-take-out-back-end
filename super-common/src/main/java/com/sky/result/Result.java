@@ -3,6 +3,7 @@ package com.sky.result;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * 后端统一返回结果
@@ -34,5 +35,4 @@ public class Result<T> implements Serializable {
         result.code = 0;
         return result;
     }
-
 }

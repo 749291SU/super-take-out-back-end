@@ -4,8 +4,7 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.result.PageResult;
-import com.sky.vo.DishVO;
-import com.sky.vo.TurnoverReportVO;
+import com.sky.vo.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,4 +21,10 @@ import java.util.List;
 
 public interface ReportService {
     TurnoverReportVO turnOverStatistics(LocalDate begin, LocalDate end);
+
+    UserReportVO getUserStatistics(LocalDate begin, LocalDate end);
+
+    OrderReportVO getOrderStatistics(LocalDate begin, LocalDate end);
+
+    SalesTop10ReportVO getTop10(LocalDate begin, LocalDate end);
 }

@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,4 +40,6 @@ public interface OrderMapper {
 
     // 查询指定日期的所有已完成的订单总金额
     BigDecimal getTurnoverByMap(Map<String, Object> params);
+
+    Integer getOrderAmountByMap(HashMap<String, Object> params);
 }

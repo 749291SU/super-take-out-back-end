@@ -9,4 +9,20 @@
             (#{item.name}, #{item.image}, #{item.orderId}, #{item.dishId}, #{item.setmealId}, #{item.dishFlavor}, #{item.amount})
         </foreach>
     </insert>
+    <select id="selectByMap" resultType="com.sky.entity.OrderDetail">
+        select od.id, od.name, od.image, od.order_id, od.dish_id, od.setmeal_id, od.dish_flavor, od.number, od.amount
+        from orders o
+        left join order_detail od on o.id = od.order_id
+        <where>
+            <if test="begin != null">
+                and o.order_time &gt;= #{begin}
+            </if>
+            <if test="end != null">
+                and o.order_time &lt;= #{end}
+            </if>
+            <if test="status != null">
+                and o.status = #{status}
+            </if>
+        </where>
+    </select>
 </mapper>

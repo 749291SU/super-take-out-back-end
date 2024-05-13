@@ -50,5 +50,35 @@ public class ReportController {
     /**
      * 用户统计
      */
+    @ApiOperation("用户统计")
+    @GetMapping("userStatistics")
+    public Result userStatistics(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+        log.info("用户统计: begin: {}, end: {}", begin, end);
+        return Result.success(reportService.getUserStatistics(begin, end));
+    }
 
+    /**
+     * 订单统计
+     */
+    @ApiOperation("订单统计")
+    @GetMapping("ordersStatistics")
+    public Result orderStatistics(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+        log.info("订单统计: begin: {}, end: {}", begin, end);
+        return Result.success(reportService.getOrderStatistics(begin, end));
+    }
+
+    /**
+     * 查询销量top10
+     */
+    @ApiOperation("查询销量top10")
+    @GetMapping("top10")
+    public Result top10(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+        return Result.success(reportService.getTop10(begin, end));
+    }
 }
