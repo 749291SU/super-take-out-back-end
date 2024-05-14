@@ -157,7 +157,7 @@
             </if>
         </where>
     </select>
-    <select id="getTurnoverByMap" resultType="java.math.BigDecimal">
+    <select id="getTurnoverByMap" resultType="java.lang.Double">
         select sum(amount) from orders
         <where>
             <if test="begin != null">
@@ -171,7 +171,7 @@
             </if>
         </where>
     </select>
-    <select id="getOrderAmountByMap" resultType="java.lang.Integer">
+    <select id="getOrderNumberByMap" resultType="java.lang.Integer">
         select count(1) from orders
         <where>
             <if test="begin != null">

@@ -39,7 +39,7 @@ public interface OrderMapper {
     Orders getById(Long id);
 
     // 查询指定日期的所有已完成的订单总金额
-    BigDecimal getTurnoverByMap(Map<String, Object> params);
+    Double getTurnoverByMap(Map<String, Object> params);
 
-    Integer getOrderAmountByMap(HashMap<String, Object> params);
+    Integer getOrderNumberByMap(Map<String, Object> params);
 }

@@ -52,7 +52,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public TurnoverReportVO turnOverStatistics(LocalDate begin, LocalDate end) {
         List<LocalDate> dateList = new ArrayList<>();
-        List<BigDecimal> turnoverList = new ArrayList<>();
+        List<Double> turnoverList = new ArrayList<>();
         for (LocalDate date = begin; ; date = date.plusDays(1)) {
             dateList.add(date);
             HashMap<String, Object> params = new HashMap<>();
@@ -61,8 +61,8 @@ public class ReportServiceImpl implements ReportService {
             params.put("status", Orders.COMPLETED);
 
             // 根据当天的起始时间点和结束时间点来查询完成了的订单总金额
-            BigDecimal turnover = orderMapper.getTurnoverByMap(params);
-            turnover = turnover == null ? BigDecimal.ZERO : turnover;
+            Double turnover = orderMapper.getTurnoverByMap(params);
+            turnover = turnover == null ? 0.0 : turnover;
 
             turnoverList.add(turnover);
             if (date.equals(end)) {
@@ -80,8 +80,8 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public UserReportVO getUserStatistics(LocalDate begin, LocalDate end) {
         List<LocalDate> dateList = new ArrayList<>();
-        List<Long> totalUserList = new ArrayList<>();
-        List<Long> newUserList = new ArrayList<>();
+        List<Integer> totalUserList = new ArrayList<>();
+        List<Integer> newUserList = new ArrayList<>();
 
         for (LocalDate date = begin; ; date = date.plusDays(1)) {
             dateList.add(date);
@@ -89,14 +89,14 @@ public class ReportServiceImpl implements ReportService {
             params1.put("begin", LocalDateTime.of(date, LocalTime.MIN));
             params1.put("end", LocalDateTime.of(date, LocalTime.MAX));
             // 查询当天新增用户数
-            Long newUser = userMapper.getUserAmountByMap(params1);
+            Integer newUser = userMapper.getUserAmountByMap(params1);
             newUser = newUser == null ? 0 : newUser;
             newUserList.add(newUser);
 
             HashMap<String, Object> params2 = new HashMap<>();
             params2.put("end", LocalDateTime.of(date, LocalTime.MAX));
             // 查询当天总用户数
-            Long totalUser = userMapper.getUserAmountByMap(params2);
+            Integer totalUser = userMapper.getUserAmountByMap(params2);
             totalUser = totalUser == null ? 0 : totalUser;
             totalUserList.add(totalUser);
             if (date.equals(end)) {
@@ -125,14 +125,14 @@ public class ReportServiceImpl implements ReportService {
             params.put("begin", LocalDateTime.of(date, LocalTime.MIN));
             params.put("end", LocalDateTime.of(date, LocalTime.MAX));
             // 查询当天订单总数
-            Integer orderCount = orderMapper.getOrderAmountByMap(params);
+            Integer orderCount = orderMapper.getOrderNumberByMap(params);
             orderCount = orderCount == null ? 0 : orderCount;
             orderCountList.add(orderCount);
             totalOrderCount += orderCount;
 
             // 查询当天有效订单数
             params.put("status", Orders.COMPLETED);
-            Integer validOrderCountToday = orderMapper.getOrderAmountByMap(params);
+            Integer validOrderCountToday = orderMapper.getOrderNumberByMap(params);
             validOrderCountToday = validOrderCountToday == null ? 0 : validOrderCountToday;
             validOrderCountList.add(validOrderCountToday);
             validOrderCount += validOrderCountToday;
