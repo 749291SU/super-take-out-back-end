@@ -13,14 +13,19 @@ import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.service.OrderService;
 import com.sky.service.ReportService;
+import com.sky.service.WorkspaceService;
 import com.sky.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -48,6 +53,8 @@ public class ReportServiceImpl implements ReportService {
     private UserMapper userMapper;
     @Autowired
     private OrderDetailMapper orderDetailMapper;
+    @Autowired
+    private WorkspaceService workspaceService;
 
     @Override
     public TurnoverReportVO turnOverStatistics(LocalDate begin, LocalDate end) {
@@ -186,5 +193,74 @@ public class ReportServiceImpl implements ReportService {
                 StringUtils.join(nameList, ","),
                 StringUtils.join(numberList, ",")
         );
+    }
+
+    @Override
+    public void export(HttpServletResponse httpServletResponse) {
+        // 查询营业数据(最近30天)
+        BusinessDataVO businessData = workspaceService.getBusinessData(
+                LocalDateTime.now().minusDays(30).with(LocalTime.MIN),
+                LocalDateTime.now().minusDays(1).with(LocalTime.MAX)
+        );
+
+
+        // 将数据通过POI写入到Excel中
+        try {
+            // 读取模板
+            XSSFWorkbook sheets = new XSSFWorkbook(this.getClass().getClassLoader().getResourceAsStream("template/运营数据报表模板.xlsx"));
+
+            // 写入时间段
+            sheets.getSheetAt(0).getRow(1).getCell(1).setCellValue("时间：" + LocalDateTime.now().minusDays(30).toLocalDate().toString()
+                            + "至" + LocalDateTime.now().minusDays(1).toLocalDate().toString());
+            // 写入数据
+            // 概览数据
+            // 营业额
+            sheets.getSheetAt(0).getRow(3).getCell(2).setCellValue(businessData.getTurnover());
+            // 订单完成率
+            sheets.getSheetAt(0).getRow(3).getCell(4).setCellValue(businessData.getOrderCompletionRate());
+            // 新增用户数
+            sheets.getSheetAt(0).getRow(3).getCell(6).setCellValue(businessData.getNewUsers());
+            // 有效订单数
+            sheets.getSheetAt(0).getRow(4).getCell(2).setCellValue(businessData.getValidOrderCount());
+            // 平均客单价
+            sheets.getSheetAt(0).getRow(4).getCell(4).setCellValue(businessData.getUnitPrice());
+
+            // 明细数据
+            // 获取查询时间段每一天的营业额，有效订单数，订单完成率，平均客单价，新增用户数
+            // 日期列表
+            List<LocalDate> dateList = new ArrayList<>();
+            // BusinessVoList
+            List<BusinessDataVO> businessDataList = new ArrayList<>();
+            for (LocalDate date = LocalDate.now().minusDays(30); ; date = date.plusDays(1)) {
+                dateList.add(date);
+                BusinessDataVO businessDataVO = workspaceService.getBusinessData(
+                        LocalDateTime.of(date, LocalTime.MIN),
+                        LocalDateTime.of(date, LocalTime.MAX)
+                );
+                businessDataList.add(businessDataVO);
+                if (date.equals(LocalDate.now().minusDays(1))) {
+                    break;
+                }
+            }
+
+            // 写入明细数据
+            int curRow = 7;
+            for (int i = 0; i < businessDataList.size(); i++) {
+                BusinessDataVO businessDataVO = businessDataList.get(i);
+                sheets.getSheetAt(0).getRow(curRow).getCell(1).setCellValue(dateList.get(i).toString());
+                sheets.getSheetAt(0).getRow(curRow).getCell(2).setCellValue(businessDataVO.getTurnover());
+                sheets.getSheetAt(0).getRow(curRow).getCell(3).setCellValue(businessDataVO.getValidOrderCount());
+                sheets.getSheetAt(0).getRow(curRow).getCell(4).setCellValue(businessDataVO.getOrderCompletionRate());
+                sheets.getSheetAt(0).getRow(curRow).getCell(5).setCellValue(businessDataVO.getUnitPrice());
+                sheets.getSheetAt(0).getRow(curRow).getCell(6).setCellValue(businessDataVO.getNewUsers());
+                curRow++;
+            }
+
+            // 写入到输出流
+            sheets.write(httpServletResponse.getOutputStream());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
